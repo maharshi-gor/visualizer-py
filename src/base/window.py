@@ -2,6 +2,7 @@ import sys
 
 import pygfx as gfx
 from wgpu.gui.auto import WgpuCanvas, run
+from base.util import debounce
 
 from loader.reader import Reader
 from ui.controller import Controller
@@ -29,7 +30,14 @@ class Window:
         gfx.OrbitController(self._visualizer.camera,
                             register_events=self._visualizer.viewport)
 
+        self._canvas.add_event_handler(self._resized, 'resize')
+
         self._register_events()
+
+    def _resized(self, event):
+        self._visualizer.resized((event['width'], event['height']))
+        self._controller.resized((event['width'], event['height']))
+        debounce(self._animate)
 
     def _animate(self):
         self._visualizer.render()
@@ -37,8 +45,6 @@ class Window:
         self._renderer.flush()
 
     def show(self):
-        """Display canvas.
-        """
         self._canvas.request_draw(self._animate)
 
     def _update(self, _event):
