@@ -1,7 +1,7 @@
 [project]
 name="visualizer-py"
 version = "0.1"
-dependencies = ["nibabel", "pygfx"]
+dependencies = ["nibabel", "pygfx", "glfw"]
 
 [project.scripts]
 visualizer = 'base.window:main'
