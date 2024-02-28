@@ -24,7 +24,11 @@ class Section:
     def camera(self): return self._camera
 
     @property
-    def size(self): return self._size
+    def size(self):
+        return (
+            abs(self._bounding_box[2] - self._bounding_box[0]),
+            abs(self._bounding_box[1] - self._bounding_box[3])
+        )
 
     @property
     def bounding_box(self): return self._bounding_box

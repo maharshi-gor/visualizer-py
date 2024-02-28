@@ -51,9 +51,8 @@ class Window:
         self._canvas.request_draw()
 
     def _register_events(self):
-        self._renderer.add_event_handler(self._update, 'pointer_down')
-        self._renderer.add_event_handler(self._update, 'pointer_up')
-        self._renderer.add_event_handler(self._update, 'pointer_move')
+        self._renderer.enable_events()
+        self._renderer.add_event_handler(self._update, 'pointer_drag')
 
     @property
     def win_size(self): return self._canvas.get_logical_size()

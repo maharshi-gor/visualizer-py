@@ -14,9 +14,9 @@ class Slider(UI):
                  disk_radius=10,
                  track_color='#5da9e9',
                  disk_color='#008bf8',
-                 position=(0, 0, 0)):
+                 position=(0, 0)):
 
-        super().__init__()
+        super().__init__(position)
         self._track_geo = gfx.plane_geometry(line_width, height)
         self._track = gfx.Mesh(self._track_geo, gfx.MeshBasicMaterial(
             color=Color.get_color(track_color)))
@@ -31,14 +31,7 @@ class Slider(UI):
                                gfx.MeshBasicMaterial(color=(1, 1, 1, 1)))
 
         self._disk_clicked = False
-        self._disk.add_event_handler(self._disk_drag_started, 'pointer_down')
-        self._back_plane.add_event_handler(self._disk_drag_continue,
-                                           'pointer_move')
-        self._outer.add_event_handler(self._mouse_moved_out, 'pointer_move')
-        self._track.add_event_handler(self._disk_drag_continue, 'pointer_move')
-        self._track.add_event_handler(self._track_clicked, 'pointer_down')
-        self._disk.add_event_handler(self._disk_drag_ended, 'pointer_up')
-        self._track.local.position = position
+        self._disk.add_event_handler(self._disk_dragged, 'pointer_drag')
         self._set_position(0)
 
     def _get_objects(self):
@@ -50,26 +43,7 @@ class Slider(UI):
         x_position = min(bb[1][0], x_position)
         self._disk.local.position = (x_position, (bb[0][1]+bb[1][1])/2, 0)
 
-    def _disk_drag_started(self, event):
-        self._disk_clicked = True
-        self._mouse_moved_out = False
-        event.stop_propagation()
-
-    def _track_clicked(self, event):
+    def _disk_dragged(self, event):
         x_offset = 0.85 * 1280
         x_position = event.x - x_offset
         self._set_position(x_position)
-
-    def _disk_drag_continue(self, event):
-        if self._disk_clicked:
-            x_offset = 0.85 * 1280
-            x_position = event.x - x_offset
-            self._set_position(x_position)
-
-    def _mouse_moved_out(self, _event):
-        self._disk_clicked = False
-
-    def _disk_drag_ended(self, event):
-        self._disk_clicked = False
-        event.stop_propagation()
-        # TODO Calculate the value here...
