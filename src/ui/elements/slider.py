@@ -1,5 +1,4 @@
 import pygfx as gfx
-from base.util import Color
 
 from base.ui import UI
 
@@ -16,26 +15,34 @@ class Slider(UI):
                  disk_color='#008bf8',
                  position=(0, 0)):
 
-        super().__init__(position)
         self._track_geo = gfx.plane_geometry(line_width, height)
         self._track = gfx.Mesh(self._track_geo, gfx.MeshBasicMaterial(
-            color=Color.get_color(track_color)))
+            color=track_color))
         self._disk_geo = gfx.cylinder_geometry(disk_radius, disk_radius)
         self._disk = gfx.Mesh(self._disk_geo, gfx.MeshBasicMaterial(
-            color=Color.get_color(disk_color)))
+            color=disk_color))
+
+        self._width = line_width + disk_radius
+        self._height = 2 * disk_radius
 
         self._disk_clicked = False
-        self._disk.add_event_handler(self.set_disk_position, 'ui_pointer_drag')
-        self.set_disk_position(0)
+        self._disk.add_event_handler(self._disk_dragged, 'ui_pointer_drag')
+        self._set_disk_position(0)
+        super().__init__(position)
 
     def _get_objects(self):
         return [self._track, self._disk]
 
-    def set_disk_position(self, x_position):
+    def _set_disk_position(self, x_position):
         bb = self._track.get_bounding_box()
         x_position = max(bb[0][0], x_position)
         x_position = min(bb[1][0], x_position)
         self._disk.local.position = (x_position, (bb[0][1]+bb[1][1])/2, 0)
 
-    def set_position(self, win_size):
-        pass
+    def _disk_dragged(self, event):
+        self._set_disk_position(event.x)
+
+    def _set_position(self, position):
+        self._track.local.position = (position[0], position[1], 0)
+        # TODO: Update x_position according to value of the slider
+        self._set_disk_position(position[0])

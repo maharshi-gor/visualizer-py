@@ -3,16 +3,14 @@ import pygfx as gfx
 
 class Section:
 
-    def __init__(self, scene, renderer, rect, win_size, bg=None):
+    def __init__(self, scene, renderer, rect, bg=None):
         self._scene = scene
         self._renderer = renderer
-        self._rect = rect
-        self._win_size = win_size
+        self.rect = rect
         self._bg = None
-        self._update_bounding_box()
 
-        self._camera.width = self._bounding_box[2]
-        self._camera.height = self._bounding_box[3]
+        self._camera.width = self.rect[2]
+        self._camera.height = self.rect[3]
 
         if not bg:
             bg = gfx.BackgroundMaterial((0, 0, 0))
@@ -24,36 +22,8 @@ class Section:
     @property
     def camera(self): return self._camera
 
-    @property
-    def size(self):
-        return (
-            abs(self._bounding_box[2] - self._bounding_box[0]),
-            abs(self._bounding_box[1] - self._bounding_box[3])
-        )
-
-    @property
-    def bounding_box(self): return self._bounding_box
-
-    @property
-    def rect(self): return self._rect
-
-    @rect.setter
-    def rect(self, rect):
-        self._rect = rect
-        self._update_bounding_box()
-
-    def _update_bounding_box(self):
-        w, h = self._win_size
-        self._bounding_box = (
-            self._rect[0] * w,
-            self._rect[1] * h,
-            self._rect[2] * w,
-            self._rect[3] * h
-        )
-
     def resized(self, win_size):
         self._win_size = win_size
-        self._update_bounding_box()
 
     def set_background(self, bg):
         """Set background of the controller section.
@@ -75,5 +45,11 @@ class Section:
 
     def render(self):
         self._renderer.render(
-            self._scene, self._camera, rect=self._bounding_box, flush=False
+            self._scene, self._camera, rect=self.rect, flush=False
         )
+
+    def get_bounding_box(self):
+        return [
+            [self.rect[0], self.rect[1]],
+            [self.rect[0] + self.rect[2], self.rect[1] + self.rect[3]]
+        ]

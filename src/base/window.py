@@ -17,14 +17,14 @@ class Window:
         self._canvas = WgpuCanvas()
         self._renderer = gfx.renderers.WgpuRenderer(self._canvas)
 
-        self.win_size = (1280, 720)
+        w = 1280
+        h = 720
+        self.win_size = (w, h)
 
         self._visualizer = Visualizer(gfx.Scene(), self._renderer,
-                                      (0, 0, 0.7, 1),
-                                      self.win_size)
+                                      (0*w, 0*h, 0.7*w, 1*h))
         self._controller = Controller(gfx.Scene(), self._renderer,
-                                      (0.7, 0, 0.3, 1),
-                                      self.win_size,
+                                      (0.7*w, 0*h, 0.3*w, 1*h),
                                       gfx.BackgroundMaterial((1, 1, 1)))
 
         gfx.OrbitController(self._visualizer.camera,

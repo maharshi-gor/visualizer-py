@@ -2,6 +2,7 @@ import pygfx as gfx
 
 from base.section import Section
 from ui.containers.slice import SliceContainer
+from ui.elements.title import Title
 
 
 class Controller(Section):
@@ -9,12 +10,15 @@ class Controller(Section):
                  scene: gfx.Scene,
                  renderer: gfx.Renderer,
                  rect: tuple,
-                 win_size: tuple,
                  bg=None,
                  on_close=None):
 
         self._camera = gfx.OrthographicCamera()
-        super().__init__(scene, renderer, rect, win_size, bg)
+        super().__init__(scene, renderer, rect, bg)
+
+        self._title = Title(self.rect[2], 30,
+                            (-self.rect[2]/2, self.rect[3]/2 - 30))
+        self._title.add_to_scene(self._scene)
 
         self._containers = []
         slice_container = SliceContainer()
@@ -28,12 +32,6 @@ class Controller(Section):
 
         self._on_close = on_close
         self._register_events()
-
-        # self._parent_element = gfx.Mesh(
-        #     gfx.plane_geometry(*self.size),
-        #     gfx.MeshBasicMaterial(color=Color.get_color('#ffffff')))
-
-        # self._scene.add(self._parent_element)
 
     def resized(self, win_size):
         super().resized(win_size)
@@ -61,8 +59,8 @@ class Controller(Section):
         ui_event = None
         if event.__class__.__name__ == 'PointerEvent':
             ui_event = gfx.PointerEvent(
-                x=event.x - self._win_size[0]*(1 - 0.5*self._rect[2]),
-                y=event.y - (self._rect[3])/2,
+                x=event.x - self.rect[0] - self.rect[2]/2,
+                y=event.y - (self.rect[3])/2,
                 target=event.target,
                 type='ui_' + event.type
             )
