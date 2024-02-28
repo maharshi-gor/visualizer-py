@@ -3,9 +3,9 @@ class Container:
         self._isOpen = False
         self._elements = []
 
-    def set_position(self, win_size):
+    def set_position(self, position):
         for element in self._elements:
-            element.set_position(win_size)
+            element.set_position(position)
 
     def add_to_scene(self, scene):
         for element in self._elements:

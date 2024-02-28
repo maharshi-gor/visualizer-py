@@ -34,7 +34,8 @@ class Controller(Section):
         self._register_events()
 
     def resized(self, win_size):
-        super().resized(win_size)
+        w, h = win_size
+        self.rect = (0.7*w, 0*h, 0.3*w, 1*h)
 
         for container in self._containers:
             container.resize()

@@ -1,3 +1,4 @@
+from abc import abstractmethod
 import pygfx as gfx
 
 
@@ -22,8 +23,10 @@ class Section:
     @property
     def camera(self): return self._camera
 
+    @abstractmethod
     def resized(self, win_size):
-        self._win_size = win_size
+        RuntimeError('Method resized should be implemented in '
+                     + self.__class__.__name__)
 
     def set_background(self, bg):
         """Set background of the controller section.
