@@ -7,8 +7,9 @@ class Section:
         self._scene = scene
         self._renderer = renderer
         self._rect = rect
+        self._win_size = win_size
         self._bg = None
-        self._update_bounding_box(win_size)
+        self._update_bounding_box()
 
         self._camera.width = self._bounding_box[2]
         self._camera.height = self._bounding_box[3]
@@ -33,8 +34,16 @@ class Section:
     @property
     def bounding_box(self): return self._bounding_box
 
-    def _update_bounding_box(self, win_size):
-        w, h = win_size
+    @property
+    def rect(self): return self._rect
+
+    @rect.setter
+    def rect(self, rect):
+        self._rect = rect
+        self._update_bounding_box()
+
+    def _update_bounding_box(self):
+        w, h = self._win_size
         self._bounding_box = (
             self._rect[0] * w,
             self._rect[1] * h,
@@ -43,7 +52,8 @@ class Section:
         )
 
     def resized(self, win_size):
-        self._update_bounding_box(win_size)
+        self._win_size = win_size
+        self._update_bounding_box()
 
     def set_background(self, bg):
         """Set background of the controller section.

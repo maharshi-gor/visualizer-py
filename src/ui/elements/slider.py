@@ -23,27 +23,19 @@ class Slider(UI):
         self._disk_geo = gfx.cylinder_geometry(disk_radius, disk_radius)
         self._disk = gfx.Mesh(self._disk_geo, gfx.MeshBasicMaterial(
             color=Color.get_color(disk_color)))
-        self._back_plane = gfx.Mesh(
-            gfx.plane_geometry(line_width + 2 * disk_radius, 2 * disk_radius),
-            gfx.MeshBasicMaterial(color=(1, 1, 1, 1)))
-        self._outer = gfx.Mesh(gfx.plane_geometry(line_width + 3 * disk_radius,
-                                                  3 * disk_radius),
-                               gfx.MeshBasicMaterial(color=(1, 1, 1, 1)))
 
         self._disk_clicked = False
-        self._disk.add_event_handler(self._disk_dragged, 'pointer_drag')
-        self._set_position(0)
+        self._disk.add_event_handler(self.set_disk_position, 'ui_pointer_drag')
+        self.set_disk_position(0)
 
     def _get_objects(self):
-        return [self._track, self._disk, self._back_plane, self._outer]
+        return [self._track, self._disk]
 
-    def _set_position(self, x_position):
+    def set_disk_position(self, x_position):
         bb = self._track.get_bounding_box()
         x_position = max(bb[0][0], x_position)
         x_position = min(bb[1][0], x_position)
         self._disk.local.position = (x_position, (bb[0][1]+bb[1][1])/2, 0)
 
-    def _disk_dragged(self, event):
-        x_offset = 0.85 * 1280
-        x_position = event.x - x_offset
-        self._set_position(x_position)
+    def set_position(self, win_size):
+        pass

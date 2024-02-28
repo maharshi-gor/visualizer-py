@@ -39,6 +39,10 @@ class Window:
         self._controller.resized((event['width'], event['height']))
         debounce(self._animate)
 
+    def _controller_closed(self):
+        # TODO: update the bounding box of visualizer and render
+        pass
+
     def _animate(self):
         self._visualizer.render()
         self._controller.render()
@@ -52,7 +56,7 @@ class Window:
 
     def _register_events(self):
         self._renderer.enable_events()
-        self._renderer.add_event_handler(self._update, 'pointer_drag')
+        self._renderer.add_event_handler(self._update, 'ui_pointer_drag')
 
     @property
     def win_size(self): return self._canvas.get_logical_size()
