@@ -8,13 +8,11 @@ class UI:
     """
     Properties
     """
-    @abstractmethod
-    def _get_objects(self):
-        RuntimeError('Method _get_objects should be implemented in '
-                     + self.__class__.__name__)
+    @property
+    def objects(self): return self._get_objects()
 
     @property
-    def position(self): return self._position
+    def position(self): return self.position
 
     @position.setter
     def position(self, position):
@@ -29,6 +27,11 @@ class UI:
     @abstractmethod
     def _set_position(self, position):
         RuntimeError('Method _set_position should be implemented in '
+                     + self.__class__.__name__)
+
+    @abstractmethod
+    def _get_objects(self):
+        RuntimeError('Method _get_objects should be implemented in '
                      + self.__class__.__name__)
 
     """

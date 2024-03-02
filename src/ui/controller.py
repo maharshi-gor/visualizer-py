@@ -16,12 +16,15 @@ class Controller(Section):
         self._camera = gfx.OrthographicCamera()
         super().__init__(scene, renderer, rect, bg)
 
-        self._title = Title(self.rect[2], 30,
-                            (-self.rect[2]/2, self.rect[3]/2 - 30))
+        self._title = Title((-self.rect[2]/2, self.rect[3]/2 - 30),
+                            width=self.rect[2])
         self._title.add_to_scene(self._scene)
 
         self._containers = []
-        slice_container = SliceContainer()
+        slice_container = SliceContainer((-self.rect[2]/2,
+                                          self.rect[3]/2 - 30),
+                                         width=self.rect[2],
+                                         height=self.rect[3] - 30)
         self._containers.append(slice_container)
 
         for container in self._containers:
@@ -38,7 +41,7 @@ class Controller(Section):
         self.rect = (0.7*w, 0*h, 0.3*w, 1*h)
 
         for container in self._containers:
-            container.resize()
+            container.position = (-self.rect[2]/2, self.rect[3]/2 - 30)
 
     def _register_events(self):
 
